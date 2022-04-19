@@ -1,0 +1,156 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR X11)
+/*
+ * Copyright 2018 Icenowy Zheng <icenowy@aosc.io>
+ */
+
+/dts-v1/;
+#include "suniv-f1c100s.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	model = "Mango-pi";
+	compatible = "mango,mango-pi", "allwinner,suniv-f1c100s";
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	panel: panel {
+		compatible = "alientek,alientek_7_inch", "simple-panel";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		enable-gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>;
+		reset-gpios = <&pio 4 4 GPIO_ACTIVE_LOW>;
+		power-supply = <&reg_vcc3v3>;
+ 		port@0 {
+			reg = <0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+ 			panel_input: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&tcon0_out_lcd>;
+			};
+		};
+	};
+
+	reg_vcc3v3: vcc3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led1 {
+			label = "heartbeat";
+			default-state = "on";
+			linux,default-trigger = "heartbeat";
+			gpios = <&pio 4 3 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	gpio-keys {
+		compatible = "gpio-keys-scan";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        status = "okay";
+        autorepeat;
+		key1 {
+			label = "key1";
+			linux,code = <1>;
+			gpios = <&pio 0 0 GPIO_ACTIVE_LOW>;
+		};
+
+		key2 {
+			label = "key2";
+			linux,code = <28>;
+			gpios = <&pio 0 1 GPIO_ACTIVE_LOW>;
+		};
+
+	};
+};
+
+&be0 {
+	status = "okay";
+};
+
+&de {
+	status = "okay";
+};
+
+&tcon0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&lcd_rgb666_pins>;
+	status = "okay";
+};
+
+&tcon0_out {
+	tcon0_out_lcd: endpoint@0 {
+		reg = <0>;
+		remote-endpoint = <&panel_input>;
+	};
+};
+
+&mmc0 {
+	vmmc-supply = <&reg_vcc3v3>;
+	bus-width = <4>;
+	broken-cd;
+	status = "okay";
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pe_pins>;
+	status = "okay";
+};
+
+&otg_sram {
+	status = "okay";
+};
+
+&usb_otg {
+	dr_mode = "otg";
+	status = "okay";
+};
+
+&usbphy {
+	usb0_id_det-gpio = <&pio 4 2 GPIO_ACTIVE_HIGH>; /* PE2 */
+	status = "okay";
+};
+
+&i2c0 {
+    pinctrl-0 = <&i2c0_pins>;
+    pinctrl-names = "default";
+    status = "okay";
+
+    ft5426: touchscreen@38 {
+        compatible = "edt,edt-ft5406";
+        reg = <0x38>;
+        interrupt-parent = <&pio>;
+        interrupts = <4 5 IRQ_TYPE_EDGE_FALLING>; /* (PE5) */
+        pinctrl-names = "default";
+        /* pinctrl-0 = <&ts_reset_pin>; */
+        irq-gpios = <&pio 4 5 GPIO_ACTIVE_HIGH>; /* (PE5) */
+        reset-gpios = <&pio 4 9 GPIO_ACTIVE_HIGH>; /* RST (PE9) */
+        /* touchscreen-swapped-x-y */
+    };
+};
+
+&pio {
+    ts_reset_pin: ts_reset_pin {
+        pins = "PE9";
+        function = "gpio_out";
+    };
+    ts_int_pin: ts_int_pin {
+        pins = "PE5";
+        function = "gpio_in";
+    };
+};

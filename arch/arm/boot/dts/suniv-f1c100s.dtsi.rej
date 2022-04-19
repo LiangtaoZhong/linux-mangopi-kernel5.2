@@ -1,0 +1,34 @@
+--- arch/arm/boot/dts/suniv-f1c100s.dtsi
++++ arch/arm/boot/dts/suniv-f1c100s.dtsi
+@@ -221,6 +221,31 @@
+ 			resets = <&ccu RST_BUS_UART2>;
+ 			status = "disabled";
+ 		};
++		usb_otg: usb@1c13000 {
++			compatible = "allwinner,suniv-musb";
++			reg = <0x01c13000 0x0400>;
++			clocks = <&ccu CLK_BUS_OTG>;
++			resets = <&ccu RST_BUS_OTG>;
++			interrupts = <26>;
++			interrupt-names = "mc";
++			phys = <&usbphy 0>;
++			phy-names = "usb";
++			extcon = <&usbphy 0>;
++			allwinner,sram = <&otg_sram 1>;
++			status = "disabled";
++		};
++
++		usbphy: phy@1c13400 {
++			compatible = "allwinner,suniv-usb-phy";
++			reg = <0x01c13400 0x10>;
++			reg-names = "phy_ctrl";
++			clocks = <&ccu CLK_USB_PHY0>;
++			clock-names = "usb0_phy";
++			resets = <&ccu RST_USB_PHY0>;
++			reset-names = "usb0_reset";
++			#phy-cells = <1>;
++			status = "disabled";
++		};
+ 		fe0: display-frontend@1e00000 {
+ 			compatible = "allwinner,suniv-f1c100s-display-frontend";
+ 			reg = <0x01e00000 0x20000>;
