@@ -50,10 +50,21 @@
 	leds {
 		compatible = "gpio-leds";
 		led1 {
-			label = "heartbeat";
+			label = "green";
 			default-state = "on";
 			linux,default-trigger = "heartbeat";
-			gpios = <&pio 4 3 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 4 7 GPIO_ACTIVE_HIGH>;
+		};
+		led2 {
+			label = "red";
+			default-state = "on";
+			linux,default-trigger = "heartbeat";
+			gpios = <&pio 4 8 GPIO_ACTIVE_HIGH>;
+		};
+		led3 {
+			label = "blue";
+			default-state = "heartbeat";
+			gpios = <&pio 4 9 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -127,8 +138,6 @@
 };
 
 &i2c0 {
-    pinctrl-0 = <&i2c0_pins>;
-    pinctrl-names = "default";
     status = "okay";
 
     ft5426: touchscreen@38 {
@@ -137,18 +146,20 @@
         interrupt-parent = <&pio>;
         interrupts = <4 5 IRQ_TYPE_EDGE_FALLING>; /* (PE5) */
         pinctrl-names = "default";
-        /* pinctrl-0 = <&ts_reset_pin>; */
-        irq-gpios = <&pio 4 5 GPIO_ACTIVE_HIGH>; /* (PE5) */
-        reset-gpios = <&pio 4 9 GPIO_ACTIVE_HIGH>; /* RST (PE9) */
-        /* touchscreen-swapped-x-y */
+		pinctrl-0 = <&ts_int_pin>;
+        reset-gpios = <&pio 4 10 GPIO_ACTIVE_LOW>; /* RST (PE10) */
+		touchscreen-size-x = <800>;
+		touchscreen-size-y = <480>;
+		touchscreen-swapped-x-y;
     };
 };
 
 &pio {
     ts_reset_pin: ts_reset_pin {
-        pins = "PE9";
+        pins = "PE10";
         function = "gpio_out";
     };
+
     ts_int_pin: ts_int_pin {
         pins = "PE5";
         function = "gpio_in";

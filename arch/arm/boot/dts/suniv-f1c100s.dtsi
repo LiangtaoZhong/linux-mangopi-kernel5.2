@@ -126,7 +126,7 @@
 		pio: pinctrl@1c20800 {
 			compatible = "allwinner,suniv-f1c100s-pinctrl";
 			reg = <0x01c20800 0x400>;
-			interrupts = <20>, <38>, <39>, <40>;
+			interrupts = <38>, <39>, <40>;
 			clocks = <&ccu CLK_BUS_PIO>, <&osc24M>, <&osc32k>;
 			clock-names = "apb", "hosc", "losc";
 			gpio-controller;
