@@ -25,9 +25,9 @@
 		compatible = "alientek,alientek_7_inch", "simple-panel";
 		#address-cells = <1>;
 		#size-cells = <0>;
-		enable-gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>;
 		reset-gpios = <&pio 4 4 GPIO_ACTIVE_LOW>;
 		power-supply = <&reg_vcc3v3>;
+		//backlight = <&backlight>;
  		port@0 {
 			reg = <0>;
 			#address-cells = <1>;
@@ -58,12 +58,13 @@
 		led2 {
 			label = "red";
 			default-state = "on";
-			linux,default-trigger = "heartbeat";
+			linux,default-trigger = "disk-activity";
 			gpios = <&pio 4 8 GPIO_ACTIVE_HIGH>;
 		};
 		led3 {
 			label = "blue";
-			default-state = "heartbeat";
+			default-state = "off";
+			linux,default-trigger = "keep";
 			gpios = <&pio 4 9 GPIO_ACTIVE_HIGH>;
 		};
 	};
@@ -87,7 +88,18 @@
 		};
 
 	};
+
+	backlight: backlight {
+		compatible = "pwm-backlight";
+		pwms = <&pwm 1 500000 0>;
+		pwm-names = "backlight";
+
+		brightness-levels = <0 4 8 16 32 64 128 255>;
+		default-brightness-level = <7>;
+		status = "okay";
+	};
 };
+	
 
 &be0 {
 	status = "okay";
@@ -164,4 +176,10 @@
         pins = "PE5";
         function = "gpio_in";
     };
+};
+
+&pwm {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pwm1_pin>;
+	status = "okay";
 };

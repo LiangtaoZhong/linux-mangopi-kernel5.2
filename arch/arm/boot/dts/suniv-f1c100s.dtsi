@@ -168,6 +168,11 @@
 				function = "i2c0";
 			};
 
+			pwm1_pin: pwm1_pin {
+				pins = "PE6";
+				function = "pwm1";
+			};
+
 		};
 
 		timer@1c20c00 {
@@ -344,6 +349,14 @@
 					};
 				};
 			};
+		};
+
+		pwm: pwm@1c21000 {
+			compatible = "allwinner,sun4i-a10-pwm";
+			reg = <0x01C21000 0x08>;
+			clocks = <&osc24M>;
+			#pwm-cells = <3>;
+			status = "disabled";
 		};
 	};
 };
