@@ -158,19 +158,9 @@
 				function = "mmc0";
 			};
 
-			key_pins: key_pins {
-				pins = "PA0", "PA1";
-				function = "gpio_in";
-			};
-
 			i2c0_pins: i2c0_pins {
 				pins = "PE11", "PE12";
 				function = "i2c0";
-			};
-
-			pwm1_pin: pwm1_pin {
-				pins = "PE6";
-				function = "pwm1";
 			};
 
 		};

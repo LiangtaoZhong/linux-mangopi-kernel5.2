@@ -88,7 +88,7 @@
 		};
 
 	};
-
+	/*
 	backlight: backlight {
 		compatible = "pwm-backlight";
 		pwms = <&pwm 1 500000 0>;
@@ -98,6 +98,7 @@
 		default-brightness-level = <7>;
 		status = "okay";
 	};
+	*/
 };
 	
 
@@ -176,6 +177,20 @@
         pins = "PE5";
         function = "gpio_in";
     };
+    panel_reset_pin: panel_reset_pin {
+        pins = "PE4";
+        function = "gpio_out";
+    };
+
+	pwm1_pin: pwm1_pin {
+		pins = "PE6";
+		function = "pwm1";
+	};
+	
+	key_pins: key_pins {
+		pins = "PA0", "PA1";
+		function = "gpio_in";
+	};
 };
 
 &pwm {
