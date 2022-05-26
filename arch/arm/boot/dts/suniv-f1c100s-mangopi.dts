@@ -53,19 +53,19 @@
 			label = "green";
 			default-state = "on";
 			linux,default-trigger = "heartbeat";
-			gpios = <&pio 4 7 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 4 7 GPIO_ACTIVE_LOW>;
 		};
 		led2 {
 			label = "red";
-			default-state = "on";
-			linux,default-trigger = "disk-activity";
-			gpios = <&pio 4 8 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			linux,default-trigger = "keep";
+			gpios = <&pio 4 8 GPIO_ACTIVE_LOW>;
 		};
 		led3 {
 			label = "blue";
 			default-state = "off";
 			linux,default-trigger = "keep";
-			gpios = <&pio 4 9 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 4 9 GPIO_ACTIVE_LOW>;
 		};
 	};
 
@@ -131,6 +131,12 @@
 &uart0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart0_pe_pins>;
+	status = "okay";
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pe_pins>;
 	status = "okay";
 };
 
